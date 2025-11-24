@@ -16,7 +16,7 @@ const main = async () => {
   const connection = new Connection(clusterApiUrl("devnet"));
   const payer = getKeypairFromEnvironment("SECRET_KEY");
 
-  const mint = new PublicKey("9gThZKJjQ6AfVA8iKEJnNUunaNujvSAzHeE6Sfe5c7Ze");
+  const mint = new PublicKey("HW29wXYdNx9QGqtgZKeTRFeaePuYk2TDRpCknXfbRuTM");
 
   const metadataPDA = PublicKey.findProgramAddressSync(
     [

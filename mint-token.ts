@@ -4,12 +4,14 @@ import { getKeypairFromEnvironment } from "@solana-developers/helpers";
 import { getOrCreateAssociatedTokenAccount, mintTo } from "@solana/spl-token";
 
 const main = async () => {
-  const connection = new Connection(clusterApiUrl("devnet"));
+  const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
   const payer = getKeypairFromEnvironment("SECRET_KEY");
 
   const mintAddress = new PublicKey(
-    "9gThZKJjQ6AfVA8iKEJnNUunaNujvSAzHeE6Sfe5c7Ze"
+    "HW29wXYdNx9QGqtgZKeTRFeaePuYk2TDRpCknXfbRuTM"
   );
+
+  console.log("⏳ Fetching or Creating Token Account...");
 
   const tokenAccount = await getOrCreateAssociatedTokenAccount(
     connection,
@@ -18,7 +20,10 @@ const main = async () => {
     payer.publicKey
   );
 
-  console.log("✅ Token account:", tokenAccount.address.toBase58());
+  console.log(`Token Account Ready: ${tokenAccount.address.toBase58()}`);
+  console.log("Minting Tokens");
+
+  const amount = 100 * Math.pow(10, 9);
 
   const signature = await mintTo(
     connection,
@@ -26,11 +31,11 @@ const main = async () => {
     mintAddress,
     tokenAccount.address,
     payer.publicKey,
-    1000_000_000
+    amount
   );
 
-  console.log("✅ Minted 1000 Harsh Tokens to your wallet!");
-  console.log("Signature:", signature);
+  console.log("✅ Minted successfully!");
+  console.log("Transaction Signature:", signature);
 };
 
 main();
