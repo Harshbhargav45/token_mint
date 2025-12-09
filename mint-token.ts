@@ -11,7 +11,7 @@ const main = async () => {
     "HW29wXYdNx9QGqtgZKeTRFeaePuYk2TDRpCknXfbRuTM"
   );
 
-  console.log("⏳ Fetching or Creating Token Account...");
+  console.log("Fetching or Creating Token Account...");
 
   const tokenAccount = await getOrCreateAssociatedTokenAccount(
     connection,

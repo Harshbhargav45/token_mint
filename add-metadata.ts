@@ -55,7 +55,7 @@ const main = async () => {
   );
 
   const sig = await sendAndConfirmTransaction(connection, tx, [payer]);
-  console.log("✅ Metadata added successfully!");
+  console.log("Metadata added successfully!");
   console.log("Signature:", sig);
 };
 
