@@ -1,41 +1,38 @@
 import "dotenv/config";
-import { Connection, clusterApiUrl, PublicKey } from "@solana/web3.js";
 import { getKeypairFromEnvironment } from "@solana-developers/helpers";
 import { getOrCreateAssociatedTokenAccount, mintTo } from "@solana/spl-token";
+import { Connection, clusterApiUrl, PublicKey } from "@solana/web3.js";
 
 const main = async () => {
   const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
   const payer = getKeypairFromEnvironment("SECRET_KEY");
 
-  const mintAddress = new PublicKey(
-    "HW29wXYdNx9QGqtgZKeTRFeaePuYk2TDRpCknXfbRuTM"
-  );
+  const mint = new PublicKey("BH2sojudcxLzEyixBwPisFr7TzqmHRVa4tkKn1k8qPZj");
 
-  console.log("Fetching or Creating Token Account...");
+  console.log("Creating or fetching ATA...");
 
   const tokenAccount = await getOrCreateAssociatedTokenAccount(
     connection,
-    payer,
-    mintAddress,
-    payer.publicKey
+    payer,              
+    mint,
+    payer.publicKey      
   );
 
-  console.log(`Token Account Ready: ${tokenAccount.address.toBase58()}`);
-  console.log("Minting Tokens");
+  console.log("ATA:", tokenAccount.address.toBase58());
 
-  const amount = 100 * Math.pow(10, 9);
+  const amount = 100 * 10 ** 9;
 
-  const signature = await mintTo(
+  const sig = await mintTo(
     connection,
     payer,
-    mintAddress,
+    mint,
     tokenAccount.address,
     payer.publicKey,
     amount
   );
 
-  console.log("✅ Minted successfully!");
-  console.log("Transaction Signature:", signature);
+  console.log("Minted successfully!");
+  console.log("Tx:", sig);
 };
 
 main();

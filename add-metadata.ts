@@ -6,27 +6,30 @@ import {
   Transaction,
   sendAndConfirmTransaction,
 } from "@solana/web3.js";
-import { getKeypairFromEnvironment } from "@solana-developers/helpers";
 import {
   createCreateMetadataAccountV3Instruction,
-  PROGRAM_ID as TOKEN_METADATA_PROGRAM_ID,
+  PROGRAM_ID as METADATA_PID,
 } from "@metaplex-foundation/mpl-token-metadata";
+import { getKeypairFromEnvironment } from "@solana-developers/helpers";
 
 const main = async () => {
-  const connection = new Connection(clusterApiUrl("devnet"));
+  const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
   const payer = getKeypairFromEnvironment("SECRET_KEY");
 
-  const mint = new PublicKey("HW29wXYdNx9QGqtgZKeTRFeaePuYk2TDRpCknXfbRuTM");
+  
+  const mint = new PublicKey("BH2sojudcxLzEyixBwPisFr7TzqmHRVa4tkKn1k8qPZj");
 
-  const metadataPDA = PublicKey.findProgramAddressSync(
+  
+  const [metadataPDA] = PublicKey.findProgramAddressSync(
     [
       Buffer.from("metadata"),
-      TOKEN_METADATA_PROGRAM_ID.toBuffer(),
+      METADATA_PID.toBuffer(),
       mint.toBuffer(),
     ],
-    TOKEN_METADATA_PROGRAM_ID
-  )[0];
+    METADATA_PID
+  );
 
+  
   const tx = new Transaction().add(
     createCreateMetadataAccountV3Instruction(
       {
@@ -39,9 +42,9 @@ const main = async () => {
       {
         createMetadataAccountArgsV3: {
           data: {
-            name: "Harsh Token",
-            symbol: "HRSH",
-            uri: "",
+            name: "Harsh Token",     
+            symbol: "HRSH",          
+            uri: "",                 
             sellerFeeBasisPoints: 0,
             creators: null,
             collection: null,
@@ -55,8 +58,9 @@ const main = async () => {
   );
 
   const sig = await sendAndConfirmTransaction(connection, tx, [payer]);
-  console.log("Metadata added successfully!");
-  console.log("Signature:", sig);
+
+  console.log("Metadat");
+  console.log("Tx:", sig);
 };
 
 main();

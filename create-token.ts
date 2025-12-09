@@ -4,21 +4,21 @@ import { createMint } from "@solana/spl-token";
 import { Connection, clusterApiUrl } from "@solana/web3.js";
 
 const main = async () => {
-  const connection = new Connection(clusterApiUrl("devnet"));
+  const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
+  const payer = getKeypairFromEnvironment("SECRET_KEY");
 
-  console.log("Loading user keypair...");
-  const user = getKeypairFromEnvironment("SECRET_KEY");
+  console.log("Creating new token mint...");
 
-  console.log(` User (Payer) Address: ${user.publicKey.toBase58()}`);
-  console.log(" Creating new token mint... (this might take a few seconds)");
-
-  const tokenMint = await createMint(
+  const mint = await createMint(
     connection,
-    user,
-    user.publicKey,
-    user.publicKey,
-    9
+    payer,
+    payer.publicKey,
+    payer.publicKey,
+    9        // decimals
   );
+
+  console.log( "Token Mint Created!");
+  console.log("Mint Address:", mint.toBase58());
 };
 
 main();
